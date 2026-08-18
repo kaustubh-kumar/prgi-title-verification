@@ -1,0 +1,9 @@
+# Not needed at runtime - the deployed API reads from Supabase, not the
+# CSV corpus (that's only used by src/db/import_corpus.py, a one-off local
+# script). Excluded to keep the Python function bundle smaller.
+#
+# Leading slashes anchor these to the repo root - unanchored "data/" would
+# also match src/data/ (a real package the API imports at runtime), which
+# is exactly the bug that broke the first deploy attempt.
+/data/
+/tests/

@@ -1,0 +1,29 @@
+[project]
+# Vercel's build uses `uv`, which - once pyproject.toml exists at all -
+# reads dependencies from here instead of requirements.txt (confirmed via
+# a real deploy: without this list, the build succeeded but every runtime
+# import failed with ModuleNotFoundError, since nothing had actually been
+# installed). requirements.txt is left unchanged and is still what local
+# `pip install -r requirements.txt` uses - this list is kept identical to
+# it on purpose, not a separate/duplicate dependency decision.
+name = "prgi-title-verification"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "rapidfuzz==3.14.5",
+    "jellyfish==1.2.1",
+    "metaphone==0.6",
+    "jsonschema==4.26.0",
+    "google-genai==1.60.0",
+    "psycopg[binary]==3.3.4",
+    "fastapi==0.128.0",
+    "uvicorn[standard]==0.40.0",
+    "python-dotenv==1.2.3",
+]
+
+[tool.vercel]
+# Tells Vercel's Python builder exactly where the FastAPI app object is,
+# since src/api/main.py is not one of the framework's auto-detected
+# default locations. The app itself is unchanged - this is purely a
+# deployment configuration pointer to it, per Vercel's own suggested fix.
+entrypoint = "src.api.main:app"
