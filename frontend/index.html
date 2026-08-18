@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PRGI Verify</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <div class="header-row">
+        <div>
+          <p class="brand">PRGI VERIFY</p>
+          <h1 class="tagline">Title verification and registration conflict analysis</h1>
+        </div>
+        <!-- Development-only indicator; visibility is driven by api.js's
+             IS_MOCK flag (see app.js), not hardcoded here. -->
+        <p id="mock-indicator" class="mock-indicator" hidden>Demo data · backend not connected</p>
+      </div>
+    </header>
+
+    <section class="panel query-panel">
+      <form id="verify-form" class="verify-form" autocomplete="off">
+        <label for="title-input" class="visually-hidden">Proposed publication title</label>
+        <input
+          id="title-input"
+          name="title"
+          type="text"
+          placeholder="Proposed publication title, e.g. AAJ SAMAJ DAILY"
+          required
+        />
+        <button type="submit" id="verify-button">Verify</button>
+      </form>
+      <p id="input-error" class="input-error" role="alert" hidden></p>
+    </section>
+
+    <section id="loading-state" class="panel scan-panel" hidden aria-live="polite">
+      <div class="scan-bar" aria-hidden="true"><span class="scan-bar__sweep"></span></div>
+      <p>Analyzing submission against registered PRGI titles&hellip;</p>
+    </section>
+
+    <section id="error-state" class="panel state-panel--error" hidden role="alert">
+      <p class="state-panel__title">Verification failed</p>
+      <p id="error-message"></p>
+    </section>
+
+    <div id="result" class="result" hidden>
+      <div class="result-heading">
+        <p class="section-label">Verification Result</p>
+        <p class="submitted-title" id="submitted-title-display"></p>
+      </div>
+
+      <section class="assessment-grid">
+        <!-- DECISION: the final deterministic outcome. Visually distinct
+             from both the evidence panel (raw signals) and the explanation
+             (LLM prose) below - this is a number/state, not a narrative. -->
+        <div class="panel decision-panel" id="decision-panel">
+          <span id="decision-icon" class="decision-icon" aria-hidden="true"></span>
+          <span id="decision-badge" class="decision-badge"></span>
+          <div class="probability">
+            <span class="probability__value" id="probability-value"></span>
+            <span class="probability__label">verification probability</span>
+          </div>
+          <p class="confidence-note" id="confidence-note"></p>
+        </div>
+
+        <!-- EVIDENCE: raw deterministic signals for the strongest candidate,
+             read verbatim from the backend. Nothing here is calculated by
+             the frontend. -->
+        <div class="panel evidence-panel">
+          <p class="panel-heading">Evidence</p>
+          <p class="evidence-subheading" id="evidence-subheading"></p>
+          <dl class="evidence-bars" id="evidence-bars"></dl>
+        </div>
+      </section>
+
+      <section class="panel">
+        <p class="panel-heading">Similar Registered Titles</p>
+        <ol id="similar-titles-list" class="similar-titles-list"></ol>
+        <p id="similar-titles-empty" class="empty-note" hidden>
+          No similar registered titles found.
+        </p>
+      </section>
+
+      <section class="panel">
+        <p class="panel-heading">Detected Issues</p>
+        <ul id="violations-list" class="violations-list"></ul>
+        <p id="violations-empty" class="empty-note" hidden>
+          No rule violations detected.
+        </p>
+      </section>
+
+      <!-- EXPLANATION: LLM-authored prose. Visually marked as interpretive
+           output, deliberately separate from the deterministic evidence and
+           probability above - the model explains the result, it does not
+           produce it. -->
+      <section class="panel explanation-panel">
+        <p class="panel-heading">Why This Result?</p>
+        <p class="explanation-source">Model-generated explanation, based on the evidence above</p>
+        <p id="explanation-text" class="explanation-text"></p>
+      </section>
+    </div>
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
