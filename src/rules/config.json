@@ -1,0 +1,26 @@
+{
+  "periodicity_terms": {
+    "status": "PROTOTYPE - illustrative vocabulary, not an official PRGI list.",
+    "notes": "Single-token vocabulary of common periodicity words, used only as a fallback signal. The rule layer also checks each candidate's own actual Periodicity field directly, since PRGI periodicity values are free text (e.g. 'Daily (Evening)', 'Twice a week') and cannot be reduced to a fixed enum. Tokens here are split the same way normalize_title/tokenize_title split real periodicity text, so e.g. 'half-yearly' is represented as 'half' and 'yearly'.",
+    "terms": [
+      "daily", "weekly", "monthly", "fortnightly", "quarterly",
+      "annual", "annually", "yearly", "biannual", "bimonthly",
+      "bi", "tri", "triweekly", "trimonthly", "half",
+      "thrice", "twice", "once", "evening", "morning", "weekday"
+    ]
+  },
+  "generic_components": {
+    "status": "PROTOTYPE - starter list from the PSS06 problem statement's own examples only.",
+    "notes": "Reporting-only: presence/addition/removal of these components is returned as evidence, not treated as a violation by this layer. Extend as needed.",
+    "terms": ["the", "india", "samachar", "news"]
+  },
+  "disallowed_words": {
+    "status": "PROTOTYPE_PLACEHOLDER - NOT the official PRGI disallowed-word list. The actual PRGI guideline list was not available in this repository. These entries are illustrative only (a common category of restriction across many countries' title/name-registration rules: words implying government, law-enforcement, or official state affiliation) and must be replaced with PRGI's real list before this evidence is used for anything beyond prototype demonstration.",
+    "terms": [
+      { "term": "police", "category": "implies_government_or_law_enforcement_affiliation" },
+      { "term": "cbi", "category": "implies_government_or_law_enforcement_affiliation" },
+      { "term": "cid", "category": "implies_government_or_law_enforcement_affiliation" },
+      { "term": "army", "category": "implies_government_or_law_enforcement_affiliation" }
+    ]
+  }
+}
