@@ -9,22 +9,33 @@
  * runtime access to real environment variables, so this file is the
  * equivalent: the ONE place that controls which backend the app talks to.
  *
- * For local development, the default below (http://localhost:8000) just
- * works against `uvicorn src.api.main:app --port 8000`. For a deployment
- * (e.g. Vercel), replace API_BASE_URL with the deployed backend's URL -
- * either by editing this file as part of the deploy step, or by having
- * the hosting platform template/replace it. Either way, this is the only
- * file that needs to change - never hardcode a backend URL anywhere else
- * (see frontend/js/api.js, frontend/js/realApi.js).
+ * Deployed on Vercel, frontend and API are served from the SAME origin
+ * (see vercel.json - /api/* and /health route to the Python function,
+ * everything else serves frontend/ statically), so the deployed app uses
+ * a relative path ("") rather than any hardcoded host - never hardcode a
+ * backend URL anywhere else (see frontend/js/api.js, frontend/js/realApi.js).
+ * Local development (frontend on :8765, backend on :8000) is a different
+ * origin, so that case still needs an explicit host - detected via
+ * window.location, not a separate build step.
  */
 
-// Set to false to use the real backend by default even without a query
-// override (see USE_MOCK below). Kept true for now since this is still
-// primarily developed/demoed against the mock - flip this once the real
-// backend is the default expectation.
-const DEFAULT_USE_MOCK = true;
+const LOCAL_DEV_API_BASE_URL = "http://localhost:8000";
 
-export const API_BASE_URL = "http://localhost:8000";
+function resolveApiBaseUrl() {
+  const { hostname } = window.location;
+  if (hostname === "localhost" || hostname === "127.0.0.1") {
+    return LOCAL_DEV_API_BASE_URL;
+  }
+  // Deployed: same origin as the frontend itself.
+  return "";
+}
+
+export const API_BASE_URL = resolveApiBaseUrl();
+
+// Real backend is the default now that it's live end-to-end (DB + Gemini
+// both confirmed working) - flip back to true only if reverting to
+// mock-only development.
+const DEFAULT_USE_MOCK = false;
 
 /**
  * Whether to use the mock service instead of the real API. Resolves in

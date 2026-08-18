@@ -21,8 +21,9 @@ export async function realVerifyTitle(title) {
       body: JSON.stringify({ title }),
     });
   } catch (networkError) {
+    const where = API_BASE_URL || "this site's own origin";
     throw new Error(
-      `Could not reach the verification backend at ${API_BASE_URL}. Is it running? (${networkError.message})`
+      `Could not reach the verification backend at ${where}. Is it running? (${networkError.message})`
     );
   }
 
